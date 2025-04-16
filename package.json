@@ -11,6 +11,8 @@
   "dependencies": {
     "@clerk/nextjs": "^6.15.0",
     "@prisma/client": "^6.6.0",
+    "axios": "^1.8.4",
+    "hellow-broker": "file:",
     "next": "15.3.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
