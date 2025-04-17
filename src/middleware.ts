@@ -4,7 +4,6 @@ const isProtectedRoute = createRouteMatcher([
   "/dashboard(.*)",
   "/admin(.*)",
   // "/api(.*)",
-  // "/api/admin/:path*"
 
 ]);
 

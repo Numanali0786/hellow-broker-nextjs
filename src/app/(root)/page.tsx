@@ -1,8 +1,11 @@
+import HomeSearch from '@/components/HomeSearch'
 import React from 'react'
 
 const App = () => {
   return (
-    <div>App</div>
+    <main>
+      <HomeSearch/>
+    </main>
   )
 }
 

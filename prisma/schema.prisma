@@ -1,3 +1,4 @@
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,10 +12,10 @@ model Property {
   id              String         @id @default(cuid())
   title           String
   description     String
-  location        String
-  type            PropertyType
+  type            PropertyType //House | Villa
   listingCategory ListingCategory // 🔥 Buy | Rent | Commercial
-  price           Int
+  state           String
+  city           String
   area            Int            // sqft or sq meters
   bedrooms        Int
   bathrooms       Int
