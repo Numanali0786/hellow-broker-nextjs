@@ -1,4 +1,3 @@
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -8,20 +7,60 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id        String   @id @default(uuid())
+  clerkId   String   @unique
+  email     String   @unique
+  name      String?
+  address   String?
+  title     String?
+  role      Role     @default(USER) // "ADMIN" or "USER"
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  properties Property[] // User's own listings
+  favorites  Favorite[] // Listings user has favorited
+  reports    Report[] // Listings user has reported
+}
+
 model Property {
-  id              String         @id @default(cuid())
+  id        String   @id @default(cuid())
+  approved  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+
   title           String
-  description     String
-  type            PropertyType //House | Villa
-  listingCategory ListingCategory // 🔥 Buy | Rent | Commercial
+  type            PropertyType
   state           String
-  city           String
-  area            Int            // sqft or sq meters
+  rooms           Int // sqft or sq meters
+  price           Int
+  listingCategory ListingCategory // 🔥 Buy | Rent | 
+  facing          String
+  description     String?
+  city            String
   bedrooms        Int
   bathrooms       Int
-  imageUrls       String[]
-  createdAt       DateTime       @default(now())
-  updatedAt       DateTime       @updatedAt
+  area            Int // sqft or sq meters
+  age             String
+  address         String
+
+  // 💥 Admin control related fields
+  isFeatured     Boolean    @default(false)
+  isHandpicked   Boolean    @default(false)
+  isRecommended  Boolean    @default(false)
+  isPopular      Boolean    @default(false)
+  isReported     Boolean    @default(false)
+  isBoosted      Boolean    @default(false)
+  reportReason   String? // optional text if reported
+  views          Int        @default(0) // for popularity
+  favoritesCount Int        @default(0) // for tracking likes
+  Favorite       Favorite[]
+  Report         Report[]
+
+    media       Media[]
 }
 
 enum PropertyType {
@@ -30,21 +69,52 @@ enum PropertyType {
   VILLA
   STUDIO
   LAND
-  COMMERCIAL_SPACE
+  FLOOR
+  COMMERCIAL
 }
 
 enum ListingCategory {
   BUY
   RENT
-  COMMERCIAL
 }
 
-
- model User {
-  id       String   @id @default(uuid())
-  clerkId  String   @unique
-  email    String   @unique
-  role     String   @default("user") // "admin" or "user"
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+// ADMIN can access and operate anything
+// USER can see properties and add new properties/listing
+// Both logged in if not can only see properties
+enum Role {
+  USER
+  ADMIN
 }
+
+model Favorite {
+  id         String   @id @default(cuid())
+  user       User     @relation(fields: [userId], references: [id])
+  userId     String
+  propertyId String
+  property   Property @relation(fields: [propertyId], references: [id])
+  createdAt  DateTime @default(now())
+}
+
+model Report {
+  id         String   @id @default(cuid())
+  reason     String
+  user       User     @relation(fields: [userId], references: [id])
+  userId     String
+  property   Property @relation(fields: [propertyId], references: [id])
+  propertyId String
+  createdAt  DateTime @default(now())
+}
+
+model Media {
+  id          String   @id @default(cuid())
+  publicId    String
+  url         String
+  type        String   // "image" or "video"
+  format      String?
+  width       Int?
+  height      Int?
+  createdAt   DateTime @default(now())
+  property    Property @relation(fields: [propertyId], references: [id])
+  propertyId  String
+}
+

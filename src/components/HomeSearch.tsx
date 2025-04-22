@@ -1,23 +1,4 @@
 "use client";
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuIndicator,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-  NavigationMenuViewport,
-} from "@/components/ui/navigation-menu";
-
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -53,8 +34,8 @@ export const indiaLocations: Record<string, string[]> = {
   "West Bengal": ["Kolkata", "Howrah", "Durgapur"],
 };
 
-const propertyTypes = ["HOUSE", "VILLA", "APARTMENT"];
-const listingCategories = ["BUY", "RENT", "COMMERCIAL"];
+const propertyTypes = ["HOUSE", "VILLA", "APARTMENT","COMMERCIAL"];
+const listingCategories = ["BUY", "RENT"];
 const capitalize = (str: string) => {
   return str[0] + str.slice(1).toLocaleLowerCase();
 };
@@ -74,6 +55,7 @@ const HomeSearch = () => {
 
   const [opencity, setOpencity] = React.useState(false);
   const [openState, setOpenState] = React.useState(false);
+  const [openType, setOpenType] = React.useState(false);
 
   const handleState = (event: MouseEvent, val: string) => {
     setState(val);
@@ -92,27 +74,38 @@ const HomeSearch = () => {
   return (
     <div className="flex justify-center">
       <div className="flex items-center gap-4">
-        <section className="flex flex-col gap-1">
+        <section className="flex flex-col gap-10">
           {/* categ section */}
-          <div className="flex justify-between gap-4">
+          <div className="flex justify-center gap-4">
             {listingCategories.map((cat, i) => {
               return (
-                <p
-                  className={`flex-1 hover:cursor-pointer ${
-                    listingCategory === cat
-                      ? "border-b-2 border-b-amber-600  border-r-2"
-                      : " border-r-2"
-                  } `}
-                  key={i}
-                  onClick={() => setListingCategory(cat)}
-                >
-                  {capitalize(cat)}
-                </p>
+                <div key={i} className="flex flex-col items-center">
+                  <div
+                    className={`${
+                      listingCategory === cat
+                        ? "bg-button-pink text-white"
+                        : "hover:bg-button-pink bg-white  hover:text-white transform:1s"
+                    } font-semibold w-[130px] h-[50px] flex items-center justify-center rounded-[8px] hover:cursor-pointer transition-transform duration-100 ease-linear hover:scale-105`}
+                    onClick={() => setListingCategory(cat)}
+                  >
+                    <p>{capitalize(cat)}</p>
+                  </div>
+                  {/* traingle */}
+                  {listingCategory === cat && (
+                    <p
+                      className="w-0 h-0 
+                        border-l-[15px] border-l-transparent 
+                        border-r-[15px] border-r-transparent 
+                        border-t-[15px] border-button-pink"
+                    ></p>
+                  )}
+                </div>
               );
             })}
           </div>
 
-          <div className="flex">
+          {/* 3 search elemen and search btn */}
+          <div className="grid md:grid-cols-4 sm:grid-cols-2 grid-cols-1 items-center gap-20 text-primary-light px-10 bg-white py-8 outline-[10px] outline-[rgba(255,255,255,0.18)] rounded-[8px]">
             {/* state section */}
             <Popover open={openState} onOpenChange={setOpenState}>
               <PopoverTrigger asChild className="hover:cursor-pointer">
@@ -120,7 +113,7 @@ const HomeSearch = () => {
                   variant="outline"
                   role="combobox"
                   aria-expanded={openState}
-                  className="w-[200px] justify-between"
+                  className="w-[200px] justify-between p-6"
                 >
                   {state || "Select state..."}
                   <ChevronsUpDown className="opacity-50" />
@@ -137,9 +130,7 @@ const HomeSearch = () => {
                           key={item}
                           value={item}
                           onSelect={(currentValue) => {
-                            setState(
-                              currentValue
-                            );
+                            setState(currentValue);
                             setCity(indiaLocations[currentValue]?.[0]);
                             setOpenState(false);
                           }}
@@ -166,7 +157,7 @@ const HomeSearch = () => {
                   variant="outline"
                   role="combobox"
                   aria-expanded={opencity}
-                  className="w-[200px] justify-between"
+                  className="w-[200px] justify-between p-6"
                 >
                   {city || "Select city..."}
                   <ChevronsUpDown className="opacity-50" />
@@ -201,30 +192,60 @@ const HomeSearch = () => {
                 </Command>
               </PopoverContent>
             </Popover>
-          </div>
-          {/* type section  */}
-          <div className="flex justify-between border-b-1 gap-4">
-            {propertyTypes.map((prop, i) => {
-              return (
-                <p
-                  className={`flex-1 hover:cursor-pointer ${
-                    propertyType === prop
-                      ? "border-b-2 border-b-amber-600  border-r-2"
-                      : " border-r-2"
-                  } `}
-                  key={i}
-                  onClick={() => setPropertyType(prop)}
+            {/* type section  */}
+            <Popover open={openType} onOpenChange={setOpenType}>
+              <PopoverTrigger asChild className="hover:cursor-pointer">
+                <Button
+                  variant="outline"
+                  role="combobox"
+                  aria-expanded={opencity}
+                  className="w-[200px] justify-between p-6"
                 >
-                  {capitalize(prop)}
-                </p>
-              );
-            })}
+                  {propertyType || "Property Type"}
+                  <ChevronsUpDown className="opacity-50" />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-[200px] p-0">
+                <Command>
+                  <CommandInput placeholder="Search Property Type..." />
+                  <CommandList>
+                    <CommandEmpty>No type found.</CommandEmpty>
+                    <CommandGroup>
+                      {propertyTypes.map((item) => (
+                        <CommandItem
+                          key={item}
+                          value={item}
+                          onSelect={(currentValue) => {
+                            setPropertyType(currentValue);
+                            setOpenType(false);
+                          }}
+                        >
+                          {item}
+                          <Check
+                            className={cn(
+                              "ml-auto",
+                              item === propertyType
+                                ? "opacity-100"
+                                : "opacity-0"
+                            )}
+                          />
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  </CommandList>
+                </Command>
+              </PopoverContent>
+            </Popover>
+
+            {/*Search button */}
+            <Button
+              className="font-bold text-white hover:cursor-pointer px-11 py-7 bg-button-pink"
+              onClick={handleSearch}
+            >
+              Search Now
+            </Button>
           </div>
         </section>
-        {/*Search button */}
-        <Button className="hover:cursor-pointer" onClick={handleSearch}>
-          Search
-        </Button>
       </div>
     </div>
   );

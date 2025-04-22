@@ -22,6 +22,7 @@ function isValidListingCategory(value: any): value is ListingCategory {
 export default async function PropertiesPage({ searchParams }: Props) {
   const { state, city, propertyType, listingCategories } = await searchParams;
   const filters: any = {
+    approved:true,
     ...(state && { state: { equals: state, mode: "insensitive" } }),
     ...(city && { city: { equals: city, mode: "insensitive" } }),
     ...(propertyType && { type: { equals: propertyType as PropertyType } }),
