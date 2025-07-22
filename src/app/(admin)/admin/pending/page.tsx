@@ -20,7 +20,7 @@ export default function ListingRequestsPage() {
     if (isLoaded && !isSignedIn) {
       router.push("/sign-in");
     }
-  }, [isSignedIn, isLoaded]);
+  }, [isSignedIn, isLoaded, router]);
 
   useEffect(() => {
     axios.get("/api/utils/approval").then((res) => {
@@ -39,7 +39,7 @@ export default function ListingRequestsPage() {
     <div className="p-4">
       <h2 className="text-xl font-semibold mb-4">Unapproved Listings</h2>
       <div className="space-y-4">
-        {requests.map((item, index) => (
+        {requests.map((item) => (
           <div key={item.id} className="flex justify-between items-center border p-4 rounded-md">
             <div>
               <p className="font-bold">{item.title}</p>

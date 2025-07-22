@@ -2,18 +2,8 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
-import {
-  SignedIn,
-  SignedOut,
-  SignInButton,
-  SignUpButton,
-  UserButton,
-} from "@clerk/nextjs";
-import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
-import { currentUser } from "@clerk/nextjs/server";
-import { redirect } from "next/navigation";
-import { prisma } from "@/lib/prisma";
+
 
 const poppinsfont = Poppins({
   subsets: ["latin"],
@@ -34,8 +24,7 @@ export default async function RootLayout({
   
 
   return (
-    <ClerkProvider>
-          
+    <ClerkProvider>  
       <html lang="en">
         <body
           className={`${poppinsfont.className} antialiased`}

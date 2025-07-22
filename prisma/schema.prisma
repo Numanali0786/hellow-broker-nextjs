@@ -8,7 +8,7 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
+  id        String   @id @default(cuid())
   clerkId   String   @unique
   email     String   @unique
   name      String?
@@ -24,6 +24,7 @@ model User {
   reports    Report[] // Listings user has reported
 }
 
+// 14+3
 model Property {
   id        String   @id @default(cuid())
   approved  Boolean  @default(false)
@@ -32,20 +33,23 @@ model Property {
   userId    String
   user      User     @relation(fields: [userId], references: [id])
 
-  title           String
-  type            PropertyType
-  state           String
-  rooms           Int // sqft or sq meters
+  title String
+  type  PropertyType
+
+  stateId         String
+  cityId          String
+  location        String // User enters manually
+  city            City            @relation(fields: [cityId], references: [id])
+  state           State           @relation(fields: [stateId], references: [id])
+  // rooms           Int // sqft or sq meters
   price           Int
   listingCategory ListingCategory // 🔥 Buy | Rent | 
   facing          String
   description     String?
-  city            String
   bedrooms        Int
   bathrooms       Int
   area            Int // sqft or sq meters
   age             String
-  address         String
 
   // 💥 Admin control related fields
   isFeatured     Boolean    @default(false)
@@ -59,8 +63,7 @@ model Property {
   favoritesCount Int        @default(0) // for tracking likes
   Favorite       Favorite[]
   Report         Report[]
-
-    media       Media[]
+  media          Media[]
 }
 
 enum PropertyType {
@@ -106,15 +109,29 @@ model Report {
 }
 
 model Media {
-  id          String   @id @default(cuid())
-  publicId    String
-  url         String
-  type        String   // "image" or "video"
-  format      String?
-  width       Int?
-  height      Int?
-  createdAt   DateTime @default(now())
-  property    Property @relation(fields: [propertyId], references: [id])
-  propertyId  String
+  id         String   @id @default(cuid())
+  publicId   String
+  url        String
+  type       String // "image" or "video"
+  format     String?
+  width      Int?
+  height     Int?
+  createdAt  DateTime @default(now())
+  property   Property @relation(fields: [propertyId], references: [id])
+  propertyId String
 }
 
+model State {
+  id       String     @id @default(cuid())
+  name     String
+  cities   City[]
+  Property Property[]
+}
+
+model City {
+  id       String     @id @default(cuid())
+  name     String
+  stateId  String
+  state    State      @relation(fields: [stateId], references: [id])
+  Property Property[]
+}

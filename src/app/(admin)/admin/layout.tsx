@@ -1,23 +1,11 @@
 import {
-  Sidebar,
-  SidebarContent,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { prisma } from "@/lib/prisma";
 import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-
-import Link from "next/link";
 import { getUserByClerkId } from "@/lib/db/user";
-import { adminTabs } from "@/utils/tabs";
+import SidebarProviderComp from "@/components/SidebarProviderComp";
 export default async function Layout({
   children,
 }: Readonly<{
@@ -34,29 +22,7 @@ export default async function Layout({
   if (dbUser?.role === "ADMIN") {
     return (
       <SidebarProvider>
-        <Sidebar className="">
-          <SidebarContent>
-            <SidebarGroupLabel className="text-lg pl-6 pt-6 ">
-              Hellow Broker
-            </SidebarGroupLabel>
-            <SidebarGroup>
-              <SidebarGroupContent>
-                <SidebarMenu>
-                  {adminTabs.map((item) => (
-                    <SidebarMenuItem key={item.title}>
-                      <SidebarMenuButton asChild>
-                        <Link href={item.url}>
-                          <item.icon />
-                          <span>{item.title}</span>
-                        </Link>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  ))}
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </SidebarGroup>
-          </SidebarContent>
-        </Sidebar>
+        <SidebarProviderComp />
         <main className="w-full h-full">
           <SidebarTrigger className="z-20 md:hidden mt-[18px] nl-4" />
 

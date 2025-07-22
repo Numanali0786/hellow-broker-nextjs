@@ -1,9 +1,10 @@
+import Favourate from '@/app/pages/listings/Favourate'
 import React from 'react'
 
-const Favourate = () => {
+const page = () => {
   return (
-    <div>Favourate</div>
+    <Favourate/>
   )
 }
 
-export default Favourate
+export default page

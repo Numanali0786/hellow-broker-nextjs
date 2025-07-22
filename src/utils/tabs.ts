@@ -2,7 +2,7 @@ import {
     LayoutDashboard,
     PlusSquare,
     Heart,
-    UserCog,
+
     MessageSquare,
     Settings,
     Home,

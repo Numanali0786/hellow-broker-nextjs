@@ -48,6 +48,12 @@
   --color-primary-dark:#111111;
   --color-primary-main:#333333;
   --color-primary-light:#666666;
+
+
+  --color-primary-heading:#091e42;
+  --color-primary-subheading:#8993a4;
+
+
 }
 
 :root {

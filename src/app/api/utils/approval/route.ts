@@ -1,6 +1,5 @@
 import { currentUser } from "@clerk/nextjs/server";
 import { getUserByClerkId } from "@/lib/db/user";
-import { getUnapprovedProperties } from "@/lib/db/approval";
 import { prisma } from "@/lib/prisma";
 
 export async function GET() {
