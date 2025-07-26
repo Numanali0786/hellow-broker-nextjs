@@ -25,7 +25,9 @@ type pp = Property & {
   }
 const CarouserComp = ({lists}:{
     lists:pp[]
+    
 }) => {
+  console.log(lists)
   return (
          <Carousel opts={{ align: "start" }} className="w-full max-w-4xl">
         <CarouselContent>

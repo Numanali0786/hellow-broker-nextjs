@@ -57,6 +57,7 @@ export async function getFilteredProperties(filter: string) {
   if (filter === "reported") {
     filterObj.isReported = true;
   }
+  console.log(filterObj)
   const properties = await prisma.property.findMany({
     where: filterObj,
     orderBy: {

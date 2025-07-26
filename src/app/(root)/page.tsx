@@ -1,6 +1,5 @@
 import HomeSearch from "@/components/HomeSearch";
 import Popular from "@/components/popular/Popular";
-// import NewLaunch from "@/components/newlaunch/NewLaunch";
 import TypeAnimation from "@/components/TypeAnimation";
 import { Suspense } from "react";
 
@@ -17,7 +16,7 @@ const popularSections = [
 //   },
 // ];
 
-const App = () => {
+const App = async() => {
   // seed state and city api
   // useEffect(()=>{
   //   const dbSeed = async()=>{
@@ -26,11 +25,20 @@ const App = () => {
 
   //   dbSeed()
   // },[])
+  // seed
+      // await prisma.state.create({
+      //     data: {
+      //       name: "Bihar",
+      //       cities: {
+      //         create: [{ name: "Patna" }, { name: "Muzaffarpur" }, { name: "Gaya" }],
+      //       },
+      //     },
+      //   });
 
   return (
     <main className="bg-[url('https://images.pexels.com/photos/1571470/pexels-photo-1571470.jpeg')] bg-cover bg-center h-screen bg-no-repeat absolute top-0 w-full">
       <div className="z-1 bg-[rgba(0,0,0,.5)] flex justify-center items-center h-full">
-        <div className="homecenter text-center flex flex-col gap-6">
+        <div className="homecenter text-center flex flex-col gap-4">
           <Suspense fallback={<p>Loading...</p>}>
             <TypeAnimation />
           </Suspense>

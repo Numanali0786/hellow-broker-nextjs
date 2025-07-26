@@ -36,7 +36,7 @@ const MyProperties = async () => {
             <p >{item.title}</p>
             <div className="">
               {item.media.map((data, i) => (
-                <Image key={i} src={data.url} alt="img"/>
+                <Image key={i} src={data.url} alt="img" width={50} height={50}/>
               ))}
             </div>
           </div>

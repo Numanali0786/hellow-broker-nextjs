@@ -16,6 +16,7 @@ const Popular = async ({ title, type }: { title: string; type: string }) => {
 //     },2000)
 //   })
     const lists = await getFilteredProperties(type);
+    console.log(type)
     if (!lists) return "error";
     
     return (

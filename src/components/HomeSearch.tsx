@@ -1,5 +1,5 @@
 "use client";
-import React, {  useState } from "react";
+import React, { useState } from "react";
 import { cn } from "@/lib/utils";
 
 import { Button } from "@/components/ui/button";
@@ -28,12 +28,13 @@ import { useUser } from "@clerk/nextjs";
 import toast from "react-hot-toast";
 import { Input } from "./ui/input";
 import { City, State } from "@prisma/client";
+import Spinner from "./Spinner";
+import { Slider } from "./PriceRangeSlider";
+// import PriceRangeSlider from "./PriceRangeSlider";
 
 const listingCategories = ["BUY", "RENT"];
 const propertyTypes = ["HOUSE", "VILLA", "APARTMENT", "COMMERCIAL"];
-
-const advTabs = ["bedrooms", "bathrooms", "area", "postedBy"];
-
+const advTabs = ["bedrooms", "bathrooms", "budget", "area", "postedBy"];
 const bedRoomsList = ["1 BHK", "2 BHK", "3 BHK", "4 BHK"];
 const bathRoomsList = ["1", "2", "3", "4"];
 const postedByList = ["OWner", "Builder", "Dealer"];
@@ -45,6 +46,8 @@ const HomeSearch = () => {
   const router = useRouter();
   const searchParam = useSearchParams();
 
+  const [price, setPrice] = useState<[number, number]>([0, 1000000]);
+console.log(price)
   const [selectedStateId, setSelectedStateId] = useState<string | null>("");
   const [selectedCityId, setSelectedCityId] = useState<string | null>("");
   const [location, setLocation] = useState("");
@@ -74,24 +77,15 @@ const HomeSearch = () => {
   console.log(locations);
 
   const [state, setState] = useState(states ? states[0].name : "");
-  const [city, setCity] = useState(states ? states[0].cities[0].name : "");
-  console.log(states, cities, selectedStateId);
+  // const [city, setCity] = useState(states ? states[0].cities[0].name : "");
+  const [city, setCity] = useState(cities ? cities[0].name : "");
+  // console.log(states, cities, selectedStateId);
   const [propertyType, setPropertyType] = useState(
     searchParam.get("propertyTypes") || "HOUSE"
   );
   const [listingCategory, setListingCategory] = useState(
     searchParam.get("listingCategories") || "BUY"
   );
-  // const [state, setState] = useState(searchParam.get("state") || "Delhi");
-  // const [city, setCity] = useState(
-  //   searchParam.get("city") || indiaLocations[state][0]
-  // );
-  // const [propertyType, setPropertyType] = useState(
-  //   searchParam.get("propertyTypes") || "HOUSE"
-  // );
-  // const [listingCategory, setListingCategory] = useState(
-  //   searchParam.get("listingCategories") || "BUY"
-  // );
 
   const [opencity, setOpencity] = useState(false);
   const [openState, setOpenState] = useState(false);
@@ -112,6 +106,8 @@ const HomeSearch = () => {
     if (selectedStateId) params.set("stateId", selectedStateId);
     if (selectedCityId) params.set("cityId", selectedCityId);
     if (propertyType) params.set("type", propertyType);
+    //
+    if (price) params.set("price", price.join('-'));
     if (listingCategory) params.set("listingCategory", listingCategory);
     if (location) params.set("location", location);
     if (advanceTab === "bedrooms") {
@@ -132,25 +128,26 @@ const HomeSearch = () => {
   };
 
   const handleLocation = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if(location==='') setFilteredLocs([])
-      setShowSuggestedLocs(true)
+    if (location === "") setFilteredLocs([]);
+    setShowSuggestedLocs(true);
     setLocation(e.target.value);
-    const filtered = locations.filter((loc:string) =>
+    const filtered = locations.filter((loc: string) =>
       loc.toLowerCase().includes(location.toLowerCase())
     );
-    setFilteredLocs(filtered)
-
+    setFilteredLocs(filtered);
   };
-  console.log(filteredLocs)
+  console.log(filteredLocs);
 
-  const selectLocation = (data:string)=>{
-    console.log(data)
-    setLocation(data)
-    setShowSuggestedLocs(false)
-  }
+  const selectLocation = (data: string) => {
+    console.log(data);
+    setLocation(data);
+    setShowSuggestedLocs(false);
+  };
 
-  if (isStateLoading) return <p>Loading.............</p>; // or a loader
-  if (error || !states || states.length < 1) return <p>off</p>;
+  // while state loading
+  if (isStateLoading) return <Spinner />;
+
+  if (error || !states || states.length < 1) return;
   return (
     <div className="flex justify-center">
       <div className="">
@@ -205,14 +202,16 @@ const HomeSearch = () => {
                     <CommandInput placeholder="Search state..." />
                     <CommandList>
                       <CommandEmpty>No state found.</CommandEmpty>
+                      {/* popover lists */}
                       <CommandGroup>
                         {states.map((item: State) => (
                           <CommandItem
                             key={item.id}
                             value={item.name}
                             onSelect={(currentValue) => {
-                              console.log("suppp", currentValue);
-                              setState(item.name);
+                              setState(currentValue);
+                              // or
+                              // setState(item.name);
                               setSelectedStateId(item.id);
                               setOpenState(false);
                             }}
@@ -221,7 +220,9 @@ const HomeSearch = () => {
                             <Check
                               className={cn(
                                 "ml-auto",
-                                item === state ? "opacity-100" : "opacity-0"
+                                item.name === state
+                                  ? "opacity-100"
+                                  : "opacity-0"
                               )}
                             />
                           </CommandItem>
@@ -335,31 +336,29 @@ const HomeSearch = () => {
 
               {/* advance dropdown */}
               <div
-                className={`rounded-b-sm bg-[rgba(255,255,255)] mt-1 absolute px-10 pt-6 pb-5 ${
+                className={`rounded-b-sm bg-[rgba(255,255,255)] mt-[2px] absolute px-10 pt-4 pb-5 ${
                   advancePopup
-                    ? "grid grid-cols-4 gap-40 justify-between top-60 md:top-44  shadow-sm w-[98.5%] ml-2 mx-auto left-0 transition-all  duration-100 ease-in-out"
+                    ? "grid grid-cols-5 gap-10 top-60 md:top-44  shadow-sm w-[98.5%] ml-2 mx-auto left-0 transition-all  duration-100 ease-in-out"
                     : "-z-10 -top-0"
                 }`}
               >
                 {advTabs.map((ele, i) => (
-                  <Button
+                  <p
                     key={i}
                     onClick={() =>
                       setAdvanceTab((prev) => (prev === ele ? "" : ele))
                     }
                     className={`cursor-pointer ${
                       ele === advanceTab &&
-                      "transform:1s text-black bg-gray-100 border-2 border-gray-100"
+                      " text-black bg-pink-100 border-2 rounded-lg border-pink-200"
                     }`}
-                    variant="outline"
-                    size={"sm"}
                   >
                     {ele}
-                  </Button>
+                  </p>
                 ))}
                 <div
                   className={`absolute bg-white transition-all ease-in-out
-             top-19  ${advanceTab ? "flex w-full p-6" : "top-100 -z-20"}`}
+             top-16  ${advanceTab ? "flex w-full p-2" : "top-95 -z-20"}`}
                 >
                   {advanceTab === "bedrooms" && (
                     <div className=" flex gap-4">
@@ -398,6 +397,7 @@ const HomeSearch = () => {
                       ))}
                     </div>
                   )}
+
                   {advanceTab === "area" && (
                     <div className=" flex gap-4">
                       {areaList.map((area, i) => (
@@ -405,6 +405,23 @@ const HomeSearch = () => {
                           {area}
                         </Button>
                       ))}
+                    </div>
+                  )}
+                  {advanceTab === "budget" && (
+                    <div className="w-full">
+                      <div className="mb-2 font-medium text-sm text-gray-700 flex-1">
+                        Price Range: ₹{price[0].toLocaleString()} – ₹
+                        {price[1].toLocaleString()}
+                      </div>
+                      <Slider
+                        min={0}
+                        max={5000000}
+                        step={10000}
+                        value={price}
+                        onValueChange={(val) =>
+                          setPrice(val as [number, number])
+                        }
+                      />
                     </div>
                   )}
                   {advanceTab === "postedBy" && (
@@ -424,17 +441,27 @@ const HomeSearch = () => {
             <div className="flex justify-between gap-6 mt-2 items-end">
               {/* search location */}
               <div className="relative w-full">
-              <Input
-                placeholder="Search location..."
-                onChange={handleLocation}
-                className=""
-                value={location}
-              />
-              <div className="bg-amber-100 absolute top-10 w-full rounded-sm">
-                {(showSuggestedLocs && location) && filteredLocs.map((ele,i)=>(
-                  <p className={`${showSuggestedLocs?"block cursor-pointer":"hidden"}`} key={i} onClick={()=>selectLocation(ele)}>{ele}</p>
-                ))}
-              </div>
+                <Input
+                  placeholder="Search location..."
+                  onChange={handleLocation}
+                  className=""
+                  value={location}
+                />
+                <div className="bg-amber-100 absolute top-10 w-full rounded-sm">
+                  {showSuggestedLocs &&
+                    location &&
+                    filteredLocs.map((ele, i) => (
+                      <p
+                        className={`${
+                          showSuggestedLocs ? "block cursor-pointer" : "hidden"
+                        }`}
+                        key={i}
+                        onClick={() => selectLocation(ele)}
+                      >
+                        {ele}
+                      </p>
+                    ))}
+                </div>
               </div>
               {/*Search button */}
               <Button
