@@ -107,6 +107,8 @@ export default async function PropertiesPage({ searchParams }: Props) {
       Favorite: true,
       Report: true,
       user: true,
+      city:true,
+      state:true
     },
   });
   console.log("propery..............", properties[0]);

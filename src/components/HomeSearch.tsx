@@ -25,7 +25,7 @@ import { capitalize } from "@/utils/functions";
 import axios from "axios";
 import useSWR from "swr";
 import { useUser } from "@clerk/nextjs";
-import toast from "react-hot-toast";
+// import toast from "react-hot-toast";
 import { Input } from "./ui/input";
 import { City, State } from "@prisma/client";
 import Spinner from "./Spinner";
@@ -76,15 +76,15 @@ console.log(price)
   );
   console.log(locations);
 
-  const [state, setState] = useState(states ? states[0].name : "");
+  const [state, setState] = useState("");
   // const [city, setCity] = useState(states ? states[0].cities[0].name : "");
-  const [city, setCity] = useState(cities ? cities[0].name : "");
+  const [city, setCity] = useState("");
   // console.log(states, cities, selectedStateId);
   const [propertyType, setPropertyType] = useState(
-    searchParam.get("propertyTypes") || "HOUSE"
+    searchParam.get("propertyTypes")
   );
   const [listingCategory, setListingCategory] = useState(
-    searchParam.get("listingCategories") || "BUY"
+    searchParam.get("listingCategories")
   );
 
   const [opencity, setOpencity] = useState(false);
@@ -98,10 +98,10 @@ console.log(price)
   const [showSuggestedLocs, setShowSuggestedLocs] = useState(true);
 
   const handleSearch = () => {
-    if (!state || !city) {
-      toast.error("Enter State and City");
-      return;
-    }
+    // if (!state || !city) {
+    //   toast.error("Enter State and City");
+    //   return;
+    // }
     const params = new URLSearchParams();
     if (selectedStateId) params.set("stateId", selectedStateId);
     if (selectedCityId) params.set("cityId", selectedCityId);

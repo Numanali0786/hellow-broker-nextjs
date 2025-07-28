@@ -1,14 +1,10 @@
 import HomeSearch from "@/components/HomeSearch";
 import Popular from "@/components/popular/Popular";
+import PropertyType from "@/components/propertyType/PropertyType";
 import TypeAnimation from "@/components/TypeAnimation";
 import { Suspense } from "react";
+// import PropertyType from "@/components/propertyType/PropertyType";
 
-const popularSections = [
-  {
-    type: "popular",
-    title: "Popular",
-  },
-];
 // const newlaunchSections = [
 //   {
 //     type: "boosted",
@@ -16,7 +12,7 @@ const popularSections = [
 //   },
 // ];
 
-const App = async() => {
+const App = async () => {
   // seed state and city api
   // useEffect(()=>{
   //   const dbSeed = async()=>{
@@ -26,14 +22,14 @@ const App = async() => {
   //   dbSeed()
   // },[])
   // seed
-      // await prisma.state.create({
-      //     data: {
-      //       name: "Bihar",
-      //       cities: {
-      //         create: [{ name: "Patna" }, { name: "Muzaffarpur" }, { name: "Gaya" }],
-      //       },
-      //     },
-      //   });
+  // await prisma.state.create({
+  //     data: {
+  //       name: "Bihar",
+  //       cities: {
+  //         create: [{ name: "Patna" }, { name: "Muzaffarpur" }, { name: "Gaya" }],
+  //       },
+  //     },
+  //   });
 
   return (
     <main className="bg-[url('https://images.pexels.com/photos/1571470/pexels-photo-1571470.jpeg')] bg-cover bg-center h-screen bg-no-repeat absolute top-0 w-full">
@@ -57,16 +53,9 @@ const App = async() => {
               <NewLaunch key={i} title={item.title} type={item.type} />
             ))}
           </div> */}
-          <div className="">
-            {popularSections.map((item, i) => (
-              <Popular key={i} title={item.title} type={item.type} />
-            ))}
-          </div>
-          <div className="">
-            {popularSections.map((item, i) => (
-              <Popular key={i} title={item.title} type={item.type} />
-            ))}
-          </div>
+
+          <Popular />
+          <PropertyType/>
         </div>
         <div className="mt-4">Right side</div>
       </div>
