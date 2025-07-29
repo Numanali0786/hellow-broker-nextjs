@@ -7,6 +7,9 @@ export const getApprovedProperties = async (id: string) => {
       userId: id,
       approved: true,
     },
+     include: {
+      media: true,
+    },
   });
 };
 export const getUnapprovedProperties = async (id: string) => {

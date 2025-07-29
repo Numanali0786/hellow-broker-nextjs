@@ -1,4 +1,4 @@
-import Favourate from '@/app/mypages/listings/Favourate'
+import Favourate from '@/mypages/listings/Favourate'
 import React from 'react'
 
 const page = () => {

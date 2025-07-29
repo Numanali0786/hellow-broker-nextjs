@@ -1,4 +1,4 @@
-import AddListing from '@/app/mypages/listings/AddListing'
+import AddListing from '@/mypages/listings/AddListing'
 const page = () => {
   return (
     <AddListing/>

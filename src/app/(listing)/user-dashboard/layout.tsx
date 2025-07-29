@@ -43,7 +43,7 @@ export default async function Layout({
     
     <SidebarProvider>
       <SidebarProviderComp tabs={userTabs}/>
-      <main className="w-full h-full">
+      <main className="w-full h-full bg-[#f5f7fb]">
         <SidebarTrigger className="z-20 md:hidden mt-[18px] nl-4" />
         <Toaster position="top-right" />
 
