@@ -124,6 +124,8 @@ console.log(price)
     // api call
     // example
     // http://localhost:3000/properties?stateId=cm9zr78ye0000fchwy2o22faw&cityId=cm9zr79120001fchwuho57sf3&type=HOUSE&listingCategory=BUY&location=Jamia%2C+New+Delhi
+    // http://localhost:3000/properties?stateId=cmdj717x50001fc1kyc2iws9k&cityId=cmdj717xa0002fc1k117uqfe8&type=HOUSE&price=0-930000&listingCategory=BUY&location=Muzaffarpur
+    // http://localhost:3000/properties?price=0-1000000&bedrooms=1+BHK&bedrooms=2+BHK
     router.push(`/properties?${params.toString()}`);
   };
 
