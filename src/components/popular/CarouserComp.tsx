@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { capitalize } from "@/utils/functions";
+import { capitalize } from "@/lib/utils/functions";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Carousel,
@@ -24,12 +24,16 @@ type pp = Property & {
   media: Media[];
 };
 const CarouserComp = ({ lists }: { lists: pp[] }) => {
-  const router = useRouter()
+  const router = useRouter();
   return (
     <Carousel opts={{ align: "start" }} className="w-full max-w-4xl">
       <CarouselContent>
         {lists.map((item, index) => (
-          <CarouselItem key={index} className="pl-4 md:basis-1/2 lg:basis-1/3" onClick={()=>router.push(`/properties/${item.id}`)}>
+          <CarouselItem
+            key={index}
+            className="pl-4 md:basis-1/2 lg:basis-1/3"
+            onClick={() => router.push(`/properties/${item.id}`)}
+          >
             <Card>
               <CardContent className="cursor-pointer w-full aspect-square items-center justify-center">
                 <div className="h-[190px] object-cover relative">
@@ -53,7 +57,9 @@ const CarouserComp = ({ lists }: { lists: pp[] }) => {
                       className="w-full rounded-lg mt-6 pb-4 h-[200px]"
                     />
                   )}
-                  <p className="absolute bottom-4 left-2 p-[6px] bg-white rounded-sm">&#8377;{" "}{item.price}</p>
+                  <p className="absolute bottom-4 left-2 p-[6px] bg-white rounded-sm">
+                    &#8377; {item.price}
+                  </p>
                 </div>
                 <p className="text-primary-heading text-[14px] font-[500]">
                   {capitalize(item.title)}
@@ -65,7 +71,9 @@ const CarouserComp = ({ lists }: { lists: pp[] }) => {
                   <p>kjdsjd</p>
                   <p>kjdsjd</p>
                 </div>
-                <p className="text-primary-heading text-[13px]">Posted By Owner</p>
+                <p className="text-primary-heading text-[13px]">
+                  Posted By Owner
+                </p>
               </CardContent>
             </Card>
           </CarouselItem>

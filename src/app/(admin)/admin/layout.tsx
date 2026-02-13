@@ -1,12 +1,9 @@
-import {
-  SidebarProvider,
-  SidebarTrigger,
-} from "@/components/ui/sidebar";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { getUserByClerkId } from "@/lib/db/user";
 import SidebarProviderComp from "@/components/SidebarProviderComp";
-import { adminTabs } from "@/utils/tabs";
+import { adminTabs } from "@/lib/utils/tabs";
 export default async function Layout({
   children,
 }: Readonly<{
@@ -23,7 +20,7 @@ export default async function Layout({
   if (dbUser?.role === "ADMIN") {
     return (
       <SidebarProvider>
-        <SidebarProviderComp tabs={adminTabs}/>
+        <SidebarProviderComp tabs={adminTabs} />
         <main className="w-full h-full">
           <SidebarTrigger className="z-20 md:hidden mt-[18px] nl-4" />
 

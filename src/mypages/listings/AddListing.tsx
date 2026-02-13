@@ -44,7 +44,7 @@ type UploadInfo = CloudinaryUploadWidgetResults["info"];
 
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { listingCategory, propertyType } from "@/utils/property";
+import { listingCategory, propertyType } from "@/lib/utils/property";
 import axios from "axios";
 import { CldUploadWidget } from "next-cloudinary";
 import { useState } from "react";
@@ -65,7 +65,7 @@ const formSchema = z.object({
     ["APARTMENT", "HOUSE", "VILLA", "Studio", "LAND", "FLOOR", "COMMERCIAL"],
     {
       errorMap: () => ({ message: "Please select a valid type" }),
-    }
+    },
   ),
   rooms: z.coerce.number().min(1, { message: "Please select number of rooms" }),
   price: z.coerce
@@ -89,7 +89,7 @@ const formSchema = z.object({
       "5-10 years",
       "10+ years",
     ],
-    { errorMap: () => ({ message: "Please select property age" }) }
+    { errorMap: () => ({ message: "Please select property age" }) },
   ),
   // state: z.string().min(1, { message: "State is required" }),
   // city: z.string().min(1, { message: "City is required" }),
@@ -114,12 +114,12 @@ export default function AddListing() {
   const [value] = useState("");
   const { data: states, isLoading: isStateLoading } = useSWR(
     "/api/states",
-    statefetcher
+    statefetcher,
   );
   console.log("states", states);
   const { data: cities, isLoading: isCityLoading } = useSWR(
     state ? `/api/cities?stateId=${selectedStateId}` : null,
-    cityfetcher
+    cityfetcher,
   );
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -448,7 +448,7 @@ export default function AddListing() {
                               console.log("current val", currentValue);
                               // setValue(currentValue === value ? "" : currentValue);
                               setState(
-                                currentValue === value ? "" : currentValue
+                                currentValue === value ? "" : currentValue,
                               );
                               setSelectedStateId(state.id);
                               setOpenState(false);
@@ -459,7 +459,7 @@ export default function AddListing() {
                                 "mr-2 h-4 w-4",
                                 value === state.name
                                   ? "opacity-100"
-                                  : "opacity-0"
+                                  : "opacity-0",
                               )}
                             />
                             {state.name}
@@ -503,7 +503,7 @@ export default function AddListing() {
                               console.log("current val", currentValue);
                               // setValue(currentValue === value ? "" : currentValue);
                               setCity(
-                                currentValue === value ? "" : currentValue
+                                currentValue === value ? "" : currentValue,
                               );
                               setOpenCity(false);
                             }}
@@ -513,7 +513,7 @@ export default function AddListing() {
                                 "mr-2 h-4 w-4",
                                 value === city.name
                                   ? "opacity-100"
-                                  : "opacity-0"
+                                  : "opacity-0",
                               )}
                             />
                             {city.name}

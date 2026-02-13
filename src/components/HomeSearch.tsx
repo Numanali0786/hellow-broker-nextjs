@@ -21,7 +21,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { Check, ChevronsUpDown, EllipsisVertical } from "lucide-react";
 // /properties?state=Bihar&&city=Patna
 
-import { capitalize } from "@/utils/functions";
+import { capitalize } from "@/lib/utils/functions";
 import axios from "axios";
 import useSWR from "swr";
 import { useUser } from "@clerk/nextjs";
@@ -47,7 +47,7 @@ const HomeSearch = () => {
   const searchParam = useSearchParams();
 
   const [price, setPrice] = useState<[number, number]>([0, 1000000]);
-console.log(price)
+  console.log(price);
   const [selectedStateId, setSelectedStateId] = useState<string | null>("");
   const [selectedCityId, setSelectedCityId] = useState<string | null>("");
   const [location, setLocation] = useState("");
@@ -67,12 +67,12 @@ console.log(price)
     shouldFetch && states && selectedStateId
       ? `/api/cities?stateId=${selectedStateId}`
       : null,
-    cityFetcher
+    cityFetcher,
   );
 
   const { data: locations } = useSWR(
     shouldFetch ? "/api/locations" : null,
-    locationFetcher
+    locationFetcher,
   );
   console.log(locations);
 
@@ -81,10 +81,10 @@ console.log(price)
   const [city, setCity] = useState("");
   // console.log(states, cities, selectedStateId);
   const [propertyType, setPropertyType] = useState(
-    searchParam.get("propertyTypes")
+    searchParam.get("propertyTypes"),
   );
   const [listingCategory, setListingCategory] = useState(
-    searchParam.get("listingCategories")
+    searchParam.get("listingCategories"),
   );
 
   const [opencity, setOpencity] = useState(false);
@@ -107,7 +107,7 @@ console.log(price)
     if (selectedCityId) params.set("cityId", selectedCityId);
     if (propertyType) params.set("type", propertyType);
     //
-    if (price) params.set("price", price.join('-'));
+    if (price) params.set("price", price.join("-"));
     if (listingCategory) params.set("listingCategory", listingCategory);
     if (location) params.set("location", location);
     if (advanceTab === "bedrooms") {
@@ -134,7 +134,7 @@ console.log(price)
     setShowSuggestedLocs(true);
     setLocation(e.target.value);
     const filtered = locations.filter((loc: string) =>
-      loc.toLowerCase().includes(location.toLowerCase())
+      loc.toLowerCase().includes(location.toLowerCase()),
     );
     setFilteredLocs(filtered);
   };
@@ -224,7 +224,7 @@ console.log(price)
                                 "ml-auto",
                                 item.name === state
                                   ? "opacity-100"
-                                  : "opacity-0"
+                                  : "opacity-0",
                               )}
                             />
                           </CommandItem>
@@ -271,7 +271,7 @@ console.log(price)
                                   "ml-auto",
                                   item.name === city
                                     ? "opacity-100"
-                                    : "opacity-0"
+                                    : "opacity-0",
                                 )}
                               />
                             </CommandItem>
@@ -315,7 +315,7 @@ console.log(price)
                                 "ml-auto",
                                 item === propertyType
                                   ? "opacity-100"
-                                  : "opacity-0"
+                                  : "opacity-0",
                               )}
                             />
                           </CommandItem>

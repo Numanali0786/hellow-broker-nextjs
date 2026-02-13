@@ -1,14 +1,10 @@
-import {
-
-  SidebarProvider,
-  SidebarTrigger,
-} from "@/components/ui/sidebar";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { currentUser } from "@clerk/nextjs/server";
 
 import { redirect } from "next/navigation";
 import { Toaster } from "react-hot-toast";
 import SidebarProviderComp from "@/components/SidebarProviderComp";
-import { userTabs } from "@/utils/tabs";
+import { userTabs } from "@/lib/utils/tabs";
 
 export default async function Layout({
   children,
@@ -40,9 +36,8 @@ export default async function Layout({
   // });
 
   return (
-    
     <SidebarProvider>
-      <SidebarProviderComp tabs={userTabs}/>
+      <SidebarProviderComp tabs={userTabs} />
       <main className="w-full h-full bg-[#f5f7fb]">
         <SidebarTrigger className="z-20 md:hidden mt-[18px] nl-4" />
         <Toaster position="top-right" />
